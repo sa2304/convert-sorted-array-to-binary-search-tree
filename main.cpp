@@ -7,8 +7,24 @@ using namespace std;
 class Solution {
  public:
   TreeNode *sortedArrayToBST(vector<int> &nums) {
-    // FIXME
-    return nullptr;
+    return sortedArrayToBST(nums, 0, nums.size());
+  }
+
+ private:
+  TreeNode *sortedArrayToBST(vector<int> &nums, size_t start, size_t end) {
+    TreeNode *head = nullptr;
+    if (not nums.empty() and start < end) {
+      if (1 == end - start) {
+        head = new TreeNode{nums[start]};
+      } else {
+        size_t mid = start + (end - start) / 2;
+        head = new TreeNode{nums[mid]};
+        head->left = sortedArrayToBST(nums, start, mid);
+        head->right = sortedArrayToBST(nums, mid + 1, end);
+      }
+    }
+
+    return head;
   }
 };
 
@@ -32,7 +48,7 @@ void TestSortedArrayToBST() {
     assert(sameTree(root, expected));
   }
   {
-    vector<int> numbers{1,3};
+    vector<int> numbers{1, 3};
     TreeNode *root = s.sortedArrayToBST(numbers);
     TreeNode *expected = stringToTreeNode("[3,1]"s);
     assert(sameTree(root, expected));
